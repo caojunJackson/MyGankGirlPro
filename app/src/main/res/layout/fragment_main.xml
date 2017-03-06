@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout android:id="@+id/no_wifi" android:layout_width="match_parent"
+                  android:gravity="center_horizontal"
+                  android:layout_height="match_parent"
+                  android:visibility="gone"
+                  android:orientation="vertical">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginTop="130dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/head_show"
+            app:civ_border_color="#88000000"
+            app:civ_border_width="2dp"
+        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="没有网络"
+            android:textAppearance="@style/TextAppearance.AppCompat.Notification"
+            android:textColor="#000"
+            android:textSize="20sp"/>
+    </LinearLayout>
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/easyRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        app:layout_progress="@layout/view_progress"
+    ></com.jude.easyrecyclerview.EasyRecyclerView>
+</LinearLayout>

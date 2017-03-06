@@ -145,5 +145,66 @@ public class GanHuo {
         public void setWho(String who) {
             this.who = who;
         }
+
+        @Override
+        public String toString() {
+            return "ResultsBean{" +
+                    "_id='" + _id + '\'' +
+                    ", createdAt='" + createdAt + '\'' +
+                    ", desc='" + desc + '\'' +
+                    ", publishedAt='" + publishedAt + '\'' +
+                    ", source='" + source + '\'' +
+                    ", type='" + type + '\'' +
+                    ", url='" + url + '\'' +
+                    ", used=" + used +
+                    ", who='" + who + '\'' +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o)
+                return true;
+            if (!(o instanceof ResultsBean))
+                return false;
+
+            ResultsBean that = (ResultsBean) o;
+
+            if (isUsed() != that.isUsed())
+                return false;
+            if (get_id() != null ? !get_id().equals(that.get_id()) : that.get_id() != null)
+                return false;
+            if (getCreatedAt() != null ? !getCreatedAt().equals(that.getCreatedAt()) : that
+                    .getCreatedAt() != null)
+                return false;
+            if (getDesc() != null ? !getDesc().equals(that.getDesc()) : that.getDesc() != null)
+                return false;
+            if (getPublishedAt() != null ? !getPublishedAt().equals(that.getPublishedAt()) : that
+                    .getPublishedAt() != null)
+                return false;
+            if (getSource() != null ? !getSource().equals(that.getSource()) : that.getSource() !=
+                    null)
+                return false;
+            if (getType() != null ? !getType().equals(that.getType()) : that.getType() != null)
+                return false;
+            if (getUrl() != null ? !getUrl().equals(that.getUrl()) : that.getUrl() != null)
+                return false;
+            return getWho() != null ? getWho().equals(that.getWho()) : that.getWho() == null;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = get_id() != null ? get_id().hashCode() : 0;
+            result = 31 * result + (getCreatedAt() != null ? getCreatedAt().hashCode() : 0);
+            result = 31 * result + (getDesc() != null ? getDesc().hashCode() : 0);
+            result = 31 * result + (getPublishedAt() != null ? getPublishedAt().hashCode() : 0);
+            result = 31 * result + (getSource() != null ? getSource().hashCode() : 0);
+            result = 31 * result + (getType() != null ? getType().hashCode() : 0);
+            result = 31 * result + (getUrl() != null ? getUrl().hashCode() : 0);
+            result = 31 * result + (isUsed() ? 1 : 0);
+            result = 31 * result + (getWho() != null ? getWho().hashCode() : 0);
+            return result;
+        }
     }
 }
