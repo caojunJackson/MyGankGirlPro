@@ -23,6 +23,24 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <activity android:name=".view.activity.MeizhiActivity"/>
+        <activity android:name=".view.activity.GanHuoActivity"/>
+
+        <activity android:name=".view.activity.AboutApp"
+        android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
+        </activity>
+
+
+        <activity android:name=".view.activity.AboutMe"
+                  android:parentActivityName=".view.activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".view.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

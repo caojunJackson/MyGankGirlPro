@@ -1,5 +1,6 @@
 package caojun.com.myapplication.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -25,6 +26,8 @@ import caojun.com.myapplication.model.GanHuo;
 import caojun.com.myapplication.retrofit.GankRetrofit;
 import caojun.com.myapplication.retrofit.GankServer;
 import caojun.com.myapplication.util.LogUtils;
+import caojun.com.myapplication.view.activity.GanHuoActivity;
+import caojun.com.myapplication.view.activity.MeizhiActivity;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -84,6 +87,7 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
             }
         });
 
+
     }
 
     private void init() {
@@ -93,10 +97,15 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
             mMeiZhiAdapter = new MeiZhiAdapter(getContext());
             dealAdapter(mMeiZhiAdapter);
         } else {
+
             mEasyRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mGanHuoAdapter = new GanHuoAdapter(getContext());
             dealAdapter(mGanHuoAdapter);
         }
+        mEasyRecyclerView.addItemDecoration(new SpaceDecoration(5));
+
+        mEasyRecyclerView.setRefreshListener(this);
+        onRefresh();
     }
 
 
@@ -129,12 +138,18 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
                 adapter.resumeMore();
             }
         });
-
         mEasyRecyclerView.setAdapterWithProgress(adapter);
-        mEasyRecyclerView.setRefreshListener(this);
-        mEasyRecyclerView.addItemDecoration(new SpaceDecoration(2));
 
-        onRefresh();
+        adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if(names[0].equals(mTitle)){
+                    startActivity(new Intent(getContext() , MeizhiActivity.class));
+                }else{
+                    startActivity(new Intent(getContext() , GanHuoActivity.class));
+                }
+            }
+        });
     }
 
 

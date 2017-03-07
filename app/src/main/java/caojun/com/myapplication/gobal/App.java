@@ -7,7 +7,7 @@ import android.app.Application;
  */
 
 public class App extends Application {
-    public static  String[] names = {"福利" ,"Android" , "ios" , "休息视频"};
+    public static  String[] names = {"福利" ,"Android" , "iOS" , "休息视频"};
 
     @Override
     public void onCreate() {

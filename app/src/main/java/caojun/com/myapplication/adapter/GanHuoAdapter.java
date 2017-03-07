@@ -7,7 +7,7 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import caojun.com.myapplication.model.GanHuo;
-import caojun.com.myapplication.viewholder.GanHupViewHolder;
+import caojun.com.myapplication.viewholder.GanHuoViewHolder;
 
 /**
  * Created by tiger on 2017/3/6.
@@ -20,7 +20,7 @@ public class GanHuoAdapter extends RecyclerArrayAdapter<GanHuo.ResultsBean> {
 
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-        return new GanHupViewHolder(parent);
+        return new GanHuoViewHolder(parent);
     }
 
 
