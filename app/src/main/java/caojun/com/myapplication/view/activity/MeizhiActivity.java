@@ -1,19 +1,22 @@
 package caojun.com.myapplication.view.activity;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +29,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
  * Created by tiger on 2017/3/6.
  */
 
-public class MeizhiActivity extends AppCompatActivity {
+public class MeizhiActivity extends BaseActivity {
 
     @BindView(R.id.meizhi_toolbar)
     Toolbar mMeizhiToolbar;
@@ -88,10 +91,44 @@ public class MeizhiActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save_meizhi:
-                ImageUtil.saveImage(this , mUrl , mBitmap , mMeizhi , "save");
+                BaseActivity.requestPermission(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE ,Manifest.permission.READ_EXTERNAL_STORAGE} , new BaseActivity.onRequestPermission(){
+
+                    @Override
+                    public void onGrant() {
+                        ImageUtil.saveImage(MeizhiActivity.this , mUrl , mBitmap , mMeizhi , "save");
+                    }
+
+                    @Override
+                    public void onDeny(List<String> denyedPermissions) {
+                        Snackbar.make(mMeizhi , "你拒绝了写入sd卡的权限  ", Snackbar.LENGTH_LONG).setAction("Check", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                BaseActivity.getAppDetailSettingIntent();
+                            }
+                        });
+                    }
+                });
+
+
                 break;
             case R.id.action_share_meizhi:
-                ShareUtil.shareImage(this ,  ImageUtil.saveImage(this , mUrl , mBitmap , mMeizhi , "share"));
+                BaseActivity.requestPermission(new String[]{ Manifest.permission.WRITE_EXTERNAL_STORAGE ,Manifest.permission.READ_EXTERNAL_STORAGE} , new BaseActivity.onRequestPermission(){
+
+                    @Override
+                    public void onGrant() {
+                        ShareUtil.shareImage(MeizhiActivity.this ,  ImageUtil.saveImage(MeizhiActivity.this , mUrl , mBitmap , mMeizhi , "share"));
+                    }
+
+                    @Override
+                    public void onDeny(List<String> denyedPermissions) {
+                        Snackbar.make(mMeizhi , "你拒绝了写入sd卡的权限  ", Snackbar.LENGTH_LONG).setAction("Check", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                BaseActivity.getAppDetailSettingIntent();
+                            }
+                        });
+                    }
+                });
                 break;
 
             case R.id.action_click_meizhi:

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -27,7 +26,7 @@ import rx.schedulers.Schedulers;
  * Created by tiger on 2017/3/6.
  */
 
-public class AboutApp extends AppCompatActivity {
+public class AboutApp extends BaseActivity {
 
     @BindView(R.id.image_about)
     ImageView mImageAbout;

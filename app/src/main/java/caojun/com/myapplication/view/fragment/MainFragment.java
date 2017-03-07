@@ -234,7 +234,7 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
                 }
                 page = 2;
             }
-        }, 2000);
+        }, 500);
     }
 
     @Override
@@ -245,7 +245,7 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
                 getData(20, page);
                 page++;
             }
-        }, 2000);
+        }, 0);
     }
 
     public void getData(int count, int page) {
