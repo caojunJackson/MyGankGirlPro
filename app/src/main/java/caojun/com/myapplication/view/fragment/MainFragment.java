@@ -1,6 +1,8 @@
 package caojun.com.myapplication.view.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,21 +13,31 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.SpaceDecoration;
+import com.jude.rollviewpager.RollPagerView;
+import com.jude.rollviewpager.adapter.StaticPagerAdapter;
+import com.jude.rollviewpager.hintview.ColorPointHintView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import caojun.com.myapplication.R;
 import caojun.com.myapplication.adapter.GanHuoAdapter;
 import caojun.com.myapplication.adapter.MeiZhiAdapter;
+import caojun.com.myapplication.gobal.App;
+import caojun.com.myapplication.model.Ad;
 import caojun.com.myapplication.model.GanHuo;
 import caojun.com.myapplication.retrofit.GankRetrofit;
 import caojun.com.myapplication.retrofit.GankServer;
 import caojun.com.myapplication.util.LogUtils;
+import caojun.com.myapplication.util.ScreenUtils;
 import caojun.com.myapplication.view.activity.GanHuoActivity;
 import caojun.com.myapplication.view.activity.MeizhiActivity;
 import rx.Subscriber;
@@ -92,9 +104,15 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
 
     private void init() {
         if (names[0].equals(mTitle)) {
-            mEasyRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2,
-                    StaggeredGridLayoutManager.VERTICAL));
+            StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(2,
+                    StaggeredGridLayoutManager.VERTICAL);
+
+//            GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext() , 2);
+//            gridLayoutManager.setSpanSizeLookup(mMeiZhiAdapter.obtainGridSpanSizeLookUp(2));
+
+            mEasyRecyclerView.setLayoutManager(manager);
             mMeiZhiAdapter = new MeiZhiAdapter(getContext());
+
             dealAdapter(mMeiZhiAdapter);
         } else {
 
@@ -102,27 +120,59 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
             mGanHuoAdapter = new GanHuoAdapter(getContext());
             dealAdapter(mGanHuoAdapter);
         }
-        mEasyRecyclerView.addItemDecoration(new SpaceDecoration(5));
 
+        mEasyRecyclerView.addItemDecoration(new SpaceDecoration(5));
         mEasyRecyclerView.setRefreshListener(this);
         onRefresh();
     }
 
 
     private void dealAdapter(final RecyclerArrayAdapter adapter) {
-        //        adapter.addHeader(new RecyclerArrayAdapter.ItemView() {
-        //            @Override
-        //            public View onCreateView(ViewGroup parent) {
-        //
-        //
-        //                return null;
-        //            }
-        //
-        //            @Override
-        //            public void onBindView(View headerView) {
-        //
-        //            }
-        //        });
+        adapter.addHeader(new RecyclerArrayAdapter.ItemView() {
+            @Override
+            public View onCreateView(ViewGroup parent) {
+                RollPagerView rollPagerView = new RollPagerView(getContext());
+                rollPagerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT , ScreenUtils.dip2px(getContext(),200)));
+                rollPagerView.setHintPadding(0,0,0,ScreenUtils.dip2px(getContext() , 20));
+                rollPagerView.setHintView(new ColorPointHintView(getContext() , Color.RED , Color.GRAY));
+                rollPagerView.setPlayDelay(2000);
+                rollPagerView.setAdapter(new StaticPagerAdapter() {
+
+                    private List<Ad> ads = App.getAdList();
+
+                    @Override
+                    public View getView(ViewGroup container, final int position) {
+                        ImageView imageView = new ImageView(getContext());
+                        imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+                        Glide.with(getContext())
+                                .load(ads.get(position).getImage())
+                                .into(imageView);
+
+                        imageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                startActivity(new Intent(Intent.ACTION_VIEW , Uri.parse(ads.get(position).getUrl())));
+                            }
+                        });
+
+                        return imageView;
+                    }
+
+                    @Override
+                    public int getCount() {
+                        return ads.size();
+                    }
+                });
+
+                return rollPagerView;
+            }
+
+            @Override
+            public void onBindView(View headerView) {
+
+            }
+        });
 
 
         adapter.setMore(R.layout.view_more, this);
@@ -143,13 +193,30 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
         adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                if(names[0].equals(mTitle)){
-                    startActivity(new Intent(getContext() , MeizhiActivity.class));
-                }else{
-                    startActivity(new Intent(getContext() , GanHuoActivity.class));
-                }
+                jumpActivity(position);
             }
         });
+    }
+
+
+    private void jumpActivity(int position) {
+        if (names[0].equals(mTitle)) {
+
+            String url = mMeiZhiAdapter.getItem(position).getUrl();
+            String desc = mMeiZhiAdapter.getItem(position).getDesc();
+            Intent intent = new Intent(getContext(), MeizhiActivity.class);
+            intent.putExtra("desc", desc);
+            intent.putExtra("url", url);
+            startActivity(intent);
+
+        } else {
+            String url = mGanHuoAdapter.getItem(position).getUrl();
+            String desc = mGanHuoAdapter.getItem(position).getDesc();
+            Intent intent = new Intent(getContext(), GanHuoActivity.class);
+            intent.putExtra("desc", desc);
+            intent.putExtra("url", url);
+            startActivity(intent);
+        }
     }
 
 
@@ -158,14 +225,12 @@ public class MainFragment extends Fragment implements RecyclerArrayAdapter.OnLoa
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 if (names[0].equals(mTitle)) {
                     mMeiZhiAdapter.clear();
                     getData(20, 1);
                 } else {
                     mGanHuoAdapter.clear();
                     getData(20, 1);
-
                 }
                 page = 2;
             }

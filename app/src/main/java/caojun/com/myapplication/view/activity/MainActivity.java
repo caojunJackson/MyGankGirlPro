@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import caojun.com.myapplication.R;
 import caojun.com.myapplication.gobal.App;
+import caojun.com.myapplication.util.ShareUtil;
 import caojun.com.myapplication.view.fragment.MainFragment;
 
 import static caojun.com.myapplication.gobal.App.names;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share_app:
-
+                ShareUtil.shareText(this , "给你推荐一个超帮的App!\n https://github.com/caojunJackson/MyGankGirlPro");
                 break;
             case R.id.action_about_app:
                 startActivity(new Intent(MainActivity.this , AboutApp.class));
